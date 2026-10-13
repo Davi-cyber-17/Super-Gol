@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#050816">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <title>Super Gol</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+
+  <!-- MENU -->
+  <section id="screen-menu" class="screen active">
+    <div class="hero">
+      <div class="eyebrow">// Arena online</div>
+      <h1>Super<br>Gol</h1>
+      <p class="lead">4 contra 4, até 8 jogadores. Os times vazios são completados por bots.</p>
+      <div class="chips">
+        <span class="chip">PC</span>
+        <span class="chip">Celular</span>
+        <span class="chip">Tablet</span>
+        <span class="chip">Online entre aparelhos</span>
+      </div>
+    </div>
+    <div class="menu-buttons">
+      <button class="btn btn-primary" id="btn-online">Modo Online</button>
+      <button class="btn" id="btn-local">Modo Local</button>
+      <button class="btn btn-ghost" id="btn-help">Como jogar</button>
+    </div>
+  </section>
+
+  <!-- COMO JOGAR -->
+  <section id="screen-help" class="screen">
+    <div class="panel">
+      <h2>Como jogar</h2>
+      <dl class="help">
+        <dt>Mover</dt><dd>WASD ou setas. No celular e no tablet, use o joystick da esquerda.</dd>
+        <dt>Chutar</dt><dd>Segure Espaço (ou o botão CHUTAR no celular) e solte. Quanto mais tempo segurar, mais forte o chute. As bolinhas laranja mostram a direção.</dd>
+        <dt>Correr</dt><dd>Shift (ou o botão CORRER no celular). A barra de fôlego aparece embaixo do jogador quando ele cansa.</dd>
+        <dt>Jogador 2 (local)</dt><dd>Setas para mover, Enter para chutar e Shift direito para correr.</dd>
+        <dt>Pausar (local)</dt><dd>Tecla P.</dd>
+        <dt>Online</dt><dd>Quem cria a sala roda a partida, então prefira o aparelho mais forte e mantenha a aba aberta. Quem entra pode usar computador, celular ou tablet: é só digitar o código ou abrir o link da sala.</dd>
+        <dt>Partida</dt><dd>Os minutos do placar são acelerados: 90 minutos de jogo passam na duração escolhida.</dd>
+      </dl>
+      <div class="row"><button class="btn btn-ghost" data-go="menu">Voltar</button></div>
+    </div>
+  </section>
+
+  <!-- MODO LOCAL -->
+  <section id="screen-local" class="screen">
+    <div class="panel">
+      <h2>Modo Local</h2>
+      <div class="field">
+        <label>Jogadores neste teclado</label>
+        <div class="seg" data-seg="lp">
+          <button type="button" data-v="1" class="on">1 jogador</button>
+          <button type="button" data-v="2">2 jogadores</button>
+        </div>
+      </div>
+      <div class="field" id="p2-field" hidden>
+        <label>O jogador 2 joga</label>
+        <div class="seg" data-seg="p2team">
+          <button type="button" data-v="vs" class="on">Contra o jogador 1</button>
+          <button type="button" data-v="co">No mesmo time</button>
+        </div>
+      </div>
+      <div class="field two">
+        <div><label for="loc-team-a">Time da esquerda</label><select id="loc-team-a"></select></div>
+        <div><label for="loc-team-b">Time da direita</label><select id="loc-team-b"></select></div>
+      </div>
+      <div class="field">
+        <label for="loc-dur">Duração da partida</label>
+        <select id="loc-dur">
+          <option value="120">2 minutos</option>
+          <option value="180" selected>3 minutos</option>
+          <option value="300">5 minutos</option>
+        </select>
+      </div>
+      <p class="hint" id="local-controls"></p>
+      <div class="row">
+        <button class="btn btn-ghost" data-go="menu">Voltar</button>
+        <button class="btn btn-primary" id="btn-local-start">Jogar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODO ONLINE -->
+  <section id="screen-online" class="screen">
+    <div class="panel">
+      <h2>Modo Online</h2>
+      <div class="field">
+        <label for="player-name">Seu nome</label>
+        <input id="player-name" maxlength="12" autocomplete="off" placeholder="Ex.: DAVI">
+      </div>
+      <button class="btn btn-primary block" id="btn-create">Criar sala</button>
+      <div class="or"><span>ou entre em uma sala</span></div>
+      <div class="field join">
+        <input id="join-code" maxlength="5" autocomplete="off" placeholder="Código" aria-label="Código da sala">
+        <button class="btn" id="btn-join">Entrar</button>
+      </div>
+      <p class="status" id="online-status" role="status"></p>
+      <div class="row"><button class="btn btn-ghost" data-go="menu">Voltar</button></div>
+    </div>
+  </section>
+
+  <!-- SALA / LOBBY -->
+  <section id="screen-lobby" class="screen">
+    <div class="panel wide">
+      <header class="lobby-head">
+        <div>
+          <span class="small">Código da sala</span>
+          <strong class="code" id="room-code">-----</strong>
+        </div>
+        <button class="btn btn-small" id="btn-copy-link">Convidar</button>
+      </header>
+
+      <div class="teams">
+        <div class="team" id="team-0">
+          <div class="team-head"><select id="sel-a" aria-label="Time da esquerda"></select></div>
+          <ul class="slots" id="slots-0"></ul>
+        </div>
+        <div class="team" id="team-1">
+          <div class="team-head"><select id="sel-b" aria-label="Time da direita"></select></div>
+          <ul class="slots" id="slots-1"></ul>
+        </div>
+      </div>
+
+      <div class="lobby-opts">
+        <label for="sel-dur">Duração</label>
+        <select id="sel-dur">
+          <option value="120">2 minutos</option>
+          <option value="180">3 minutos</option>
+          <option value="300">5 minutos</option>
+        </select>
+        <span class="note" id="lobby-note"></span>
+      </div>
+
+      <div class="row">
+        <button class="btn btn-ghost" id="btn-leave">Sair da sala</button>
+        <button class="btn" id="btn-switch">Trocar de time</button>
+        <button class="btn btn-primary" id="btn-start">Começar partida</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOGO -->
+  <section id="screen-game" class="screen">
+    <div id="stage">
+      <canvas id="cv" width="480" height="300"></canvas>
+    </div>
+
+    <div class="hud-btns">
+      <button type="button" id="btn-mute" aria-label="Som" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="w" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="x" d="M17 9l5 6M22 9l-5 6"/></svg>
+      </button>
+      <button type="button" id="btn-full" aria-label="Tela cheia">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+      </button>
+      <button type="button" id="btn-exit" aria-label="Sair da partida">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+
+    <div id="touch" aria-hidden="true">
+      <div id="stick"><div id="knob"></div></div>
+      <div id="tbtns">
+        <button type="button" id="t-run">Correr</button>
+        <button type="button" id="t-shoot">Chutar</button>
+      </div>
+    </div>
+
+    <div id="endcard" hidden>
+      <div class="panel">
+        <h2 id="end-title">Fim de jogo</h2>
+        <p class="score" id="end-sub"></p>
+        <p class="hint" id="end-wait" hidden>Aguardando o host decidir o próximo passo.</p>
+        <div class="row">
+          <button class="btn btn-ghost" id="btn-end-exit">Sair</button>
+          <button class="btn btn-primary" id="btn-again">Jogar de novo</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="rotate"><div class="phone"></div><p>Gire o celular<br>para o modo paisagem</p></div>
+  </section>
+
+</main>
+<div id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
